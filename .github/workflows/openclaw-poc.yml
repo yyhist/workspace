@@ -1,0 +1,34 @@
+name: OpenClaw External Node PoC
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+jobs:
+  run-task:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run shell command
+        run: |
+          echo "OpenClaw external node heartbeat"
+          date -u
+          uname -a
+      - name: Run Python script
+        run: |
+          python3 -c "
+          import json, datetime
+          payload = {
+            'node': 'github-actions',
+            'timestamp': datetime.datetime.utcnow().isoformat(),
+            'status': 'alive'
+          }
+          print(json.dumps(payload, indent=2))
+          "
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: heartbeat-${{ github.run_id }}
+          path: |
+            *.log
+            *.json
+          if-no-files-found: ignore
