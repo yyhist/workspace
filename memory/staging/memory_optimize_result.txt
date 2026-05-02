@@ -1,0 +1,19 @@
+=== 记忆系统优化记录 ===
+时间: 2026-05-01 14:47
+命令: openclaw memory optimize
+状态: 失败 — 未知命令
+
+替代尝试:
+命令: openclaw memory index --force
+状态: 成功
+输出摘要:
+  - 插件注册信息若干（DingTalk、飞书各模块等）
+  - wecom-openclaw-plugin 加载失败（运行时模块缺失）
+  - Memory index updated (main).
+
+结论:
+openclaw memory optimize 命令不存在。当前可用子命令为:
+  - index   (重索引)
+  - search  (搜索)
+  - status  (状态)
+已用 index --force 替代完成完整重索引。

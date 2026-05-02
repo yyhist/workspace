@@ -1,0 +1,217 @@
+# GitHub 探索报告 — OpenClaw 生态最新动态
+# 探测时间: 2026-05-01 13:26 GMT+8
+# 探测渠道: GitHub API (未认证, rate limit: 60 core / 10 search)
+
+---
+
+## 一、API 连通性
+
+状态: ✅ 连通
+- core limit: 60 requests, remaining: 48
+- search limit: 10 requests, remaining: 8
+- reset: 2026-05-01T13:26:15Z
+
+---
+
+## 二、OpenClaw 官方仓库核心数据
+
+仓库: https://github.com/openclaw/openclaw
+- Stars: 366,868  |  Forks: 75,370  |  Open Issues: 6,781
+- 创建于: 2025-11-24
+- 最新更新: 2026-05-01 (活跃中)
+
+描述: Your own personal AI assistant. Any OS. Any Platform. The lobster way. 🦞
+
+---
+
+## 三、最新 Commit 动态 (2026-05-01, 最近5条)
+
+### 1. fix(voice-call): stabilize Twilio STT startup (#75257)
+   - Author: Ben (@PfanP)
+   - 修复 Twilio 语音通话启动时的媒体流注册问题
+   - 实时转录就绪时仅限制初始问候语
+   - 在 STT 连接期间保留早期入站媒体
+   - 参考 Issue: #75197
+
+### 2. feat: add proxy validation command (#未标注)
+   - Author: Jesse Merhi (@jesse-merhi)
+   - 新增 `openclaw proxy validate` CLI 命令
+   - 用于操作员管理的代理预检检查
+   - 支持允许/拒绝目标验证
+   - 包含 CLI 输出、测试、文档和 changelog
+
+### 3. fix(pairing): don't silently swallow unexpected stat errors (#63324)
+   - Author: Francisco Maestre Torreblanca (@franciscomaestre)
+   - 修复配对过程中静默吞掉 stat 错误的问题
+   - Reviewed by: @sallyom
+
+### 4. fix(auto-reply): keep group visible replies deliverable (#75382)
+   - Author: Peter Steinberger (@steipete)
+   - 修复自动回复在群组可见性下的消息投递问题
+   - 更新消息工具可用性、回退策略、qa-channel 群组目标支持
+   - Review: https://github.com/openclaw/openclaw/pull/75382#issuecomment-4357590733
+
+### 5. feat(bluebubbles): add reply-context API fallback for cache misses (#71820)
+   - Author: Cole (@coletebou)
+   - 为 BlueBubbles 渠道添加缓存未命中时的回复上下文 API 回退
+   - Reviewed by: @omarshahine
+
+---
+
+## 四、关键 Issues / 近期社区报告 (10条最新)
+
+### 🔥 高危 — 2026.4.29 版本性能问题
+
+Issue #75437 — Gateway blocks event loop 30s+ per message
+   - 作者: alvaro-raise
+   - 标签: 无
+   - 影响: 所有 2026.4.15 ~ 2026.4.29 版本
+   - 症状: Gateway 每次启动和每条消息都会重新 staging bundled runtime deps,
+           manifest 从未持久化
+   - 用户体验: Telegram 消息响应延迟 30秒 ~ 3分钟
+   - 已确认: Telegram + MS Teams aspire-help bot 均受影响
+   - 最低复现: 全新 --dev profile, 无 host state, 无插件
+   - URL: https://github.com/openclaw/openclaw/issues/75437
+
+Issue #75429 / #75430 — TUI startup hangs at 100% CPU
+   - 作者: suifatt7799-oss
+   - 症状: openclaw tui 启动时 CPU 100%, 无法 Ctrl+C, 只能 kill -9
+   - 诊断: bundled plugin loader 在 tight loop 中反复重载 49 个 provider 插件
+   - 影响版本: 2026.4.29 (2026.4.24 正常)
+   - URL: https://github.com/openclaw/openclaw/issues/75430
+
+### 🐛 Bug — 渠道/多代理
+
+Issue #75434 — Feishu multi-agent accounts broken
+   - 作者: huihongze
+   - 标签: bug, regression
+   - 症状: 多 agent Feishu 路由正确但 session 文件解析回默认 'main' agent
+   - 非主 agent 无法处理消息
+   - 期望: 每个非主 agent 应正确解析自己的 session 目录、workspace、identity、memory
+   - URL: https://github.com/openclaw/openclaw/issues/75434
+
+Issue #75433 — Embedded channel reply runs crash on SecretRef-backed credentials
+   - 标签: bug
+   - 内嵌渠道回复在 SecretRef 支撑的 Telegram/Discord 凭证上崩溃
+   - URL: https://github.com/openclaw/openclaw/issues/75433
+
+Issue #75428 — Answer question too slow after update to 4.29
+   - 标签: bug, regression
+   - 更新到 2026.4.29 后回复变慢
+   - URL: https://github.com/openclaw/openclaw/issues/75428
+
+Issue #75426 — Signal inbound/SSE listener appears wedged
+   - 标签: bug
+   - Signal 出站正常、渠道探测正常，但入站 DM 不可靠触发 agent 响应
+   - `channels status` 超时
+   - URL: https://github.com/openclaw/openclaw/issues/75426
+
+### 🔧 合并中的 PR
+
+Issue #75435 — fix(memory-wiki): tolerate unavailable shared search
+   - 标签: size: M, extensions: memory-wiki
+   - 容忍不可用的共享搜索
+
+Issue #75431 — fix: use runtimeDepSpecsIncludeAll for package.json fallback
+   - 标签: size: XS
+   - 在 materialization check 中使用 runtimeDepSpecsIncludeAll 作为 package.json 回退
+
+Issue #75427 — fix(signal): keep quiet SSE receive streams open
+   - 标签: channel: signal, maintainer, size: XS
+   - 保持安静的 SSE 接收流打开
+
+---
+
+## 五、OpenClaw 生态相关仓库 (按星标排序)
+
+| 排名 | 仓库 | Stars | Forks | 描述 | 最新更新 |
+|------|------|-------|-------|------|----------|
+| 1 | openclaw/openclaw | 366,868 | 75,370 | 官方仓库. Your own personal AI assistant. 🦞 | 2026-05-01 |
+| 2 | NousResearch/hermes-agent | 127,030 | 19,050 | The agent that grows with you | 2026-05-01 |
+| 3 | farion1231/cc-switch | 56,656 | 3,678 | 跨平台桌面 All-in-One 助手 (Claude Code, Codex, OpenCode, openclaw, Gemini) | 2026-05-01 |
+| 4 | VoltAgent/awesome-openclaw-skills | 47,671 | 4,670 | OpenClaw 技能 awesome 集合. 5,400+ 技能分类 | 2026-05-01 |
+| 5 | CherryHQ/cherry-studio | 44,833 | 4,260 | AI productivity studio, 300+ assistants | 2026-05-01 |
+| 6 | zhayujie/CowAgent | 43,920 | 10,022 | 基于大模型的超级AI助理, 比OpenClaw更... | 2026-05-01 |
+| 7 | siyuan-note/siyuan | 43,307 | 2,742 | 隐私优先的自托管知识管理, 与 OpenClaw 集成 | 2026-05-01 |
+| 8 | HKUDS/nanobot | 41,410 | 7,272 | Ultra-Lightweight Personal AI Agent | 2026-05-01 |
+| 9 | safishamsi/graphify | 39,161 | 4,327 | AI coding assistant skill (多CLI支持含OpenClaw) | 2026-05-01 |
+| 10 | moeru-ai/airi | 38,827 | 3,931 | Self-hosted Grok Companion | 2026-05-01 |
+| 11 | 1Panel-dev/1Panel | 35,235 | 3,131 | 开源VPS面板, 原生AI agent支持 | 2026-05-01 |
+| 12 | AstrBotDevs/AstrBot | 31,082 | 2,138 | 多IM平台AI Agent助手 | 2026-05-01 |
+| 13 | zeroclaw-labs/zeroclaw | 30,859 | 4,525 | 快速小型全自主AI助手基础设施 | 2026-05-01 |
+| 14 | hesamsheikh/awesome-openclaw-usecases | 30,635 | 2,631 | OpenClaw 用例社区集合 | 2026-05-01 |
+| 15 | qwibitai/nanoclaw | 28,447 | 12,735 | 轻量级OpenClaw替代, 容器运行 | 2026-05-01 |
+
+---
+
+## 六、生态趋势与观察
+
+### 1. 2026.4.29 版本存在严重性能回归
+   - bundled runtime deps 在每个启动和每条消息时重新 staging
+   - 导致 Gateway 事件循环阻塞 30秒+ / 消息
+   - TUI 启动 100% CPU 死循环
+   - 这是当前社区最紧迫的问题，多个 issue 同时报告
+   - 涉及版本范围: 2026.4.15 ~ 2026.4.29 (至少6个版本)
+
+### 2. 渠道生态
+   - Signal 渠道存在 SSE 接收流问题 (#75426, #75427)
+   - Feishu 多 agent 路由回归 (#75434)
+   - BlueBubbles 缓存回退改进 (#71820)
+   - Telegram/Discord SecretRef 凭证崩溃 (#75433)
+
+### 3. 基础设施
+   - 新增 proxy validation CLI 命令 (安全网络代理预检)
+   - 配对模块修复 stat 错误静默吞掉 (#63324)
+   - 自动回复群组可见性修复 (#75382)
+
+### 4. 生态规模
+   - OpenClaw 官方仓库: 36.6万星, 7.5万 forks
+   - 技能仓库 (VoltAgent/awesome-openclaw-skills): 4.7万星, 5,400+ 技能
+   - 用例仓库 (hesamsheikh): 3万星
+   - 替代方案: nanoclaw (2.8万星), zeroclaw (3万星)
+   - 竞品生态: CowAgent (4.4万星), AstrBot (3.1万星)
+
+### 5. 时间线
+   - 2025-11-24: OpenClaw 首次开源
+   - 2026-01: awesome-openclaw-skills 创建
+   - 2026-02: nanobot (4.1万星), zeroclaw (3万星), nanoclaw (2.8万星) 创建
+   - 2026-04-25: 当前记忆系统参考日期
+   - 2026-05-01: 最新 commit/activity, 仍在活跃开发中
+
+---
+
+## 七、值得跟踪的仓库/议题
+
+### 高优先级跟踪
+1. https://github.com/openclaw/openclaw/issues/75437 — 性能回归(核心)
+2. https://github.com/openclaw/openclaw/issues/75434 — Feishu 多 agent
+3. https://github.com/openclaw/openclaw/issues/75430 — TUI 死循环
+
+### 技能/生态参考
+4. https://github.com/VoltAgent/awesome-openclaw-skills — 5,400+ 技能索引
+5. https://github.com/hesamsheikh/awesome-openclaw-usecases — 用例集合
+6. https://github.com/farion1231/cc-switch — 多CLI切换工具
+7. https://github.com/safishamsi/graphify — AI coding assistant skill
+
+### 替代/相关方案
+8. https://github.com/qwibitai/nanoclaw — 轻量级容器化替代
+9. https://github.com/zeroclaw-labs/zeroclaw — 全自主基础设施
+10. https://github.com/HKUDS/nanobot — 超轻量级个人AI Agent
+
+---
+
+## 八、技术栈洞察
+
+- 主仓库语言: TypeScript (从 commit message 中推断)
+- 包管理: pnpm (从 commit 中 "pnpm test", "pnpm exec" 推断)
+- 代码格式: oxfmt (项目自有格式化工具)
+- 代码检查: oxlint (项目自有 linter)
+- CI/CD: GitHub Actions + ClawSweeper (自动化 review 系统)
+- 测试环境: Testbox (tbx_01kqgz68ff20n3dtrgq0j1mykt)
+- 版本发布: 按日期版本号 (2026.4.29 格式)
+- 签名验证: 所有 commit 均带 PGP 签名, verified=true
+
+---
+
+# 探测完成
+# 记录写入时间: 2026-05-01T13:26+08:00

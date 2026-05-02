@@ -1,0 +1,66 @@
+=== Tor / Proxychains 测试报告 ===
+时间: Fri May  1 01:05:27 PM CST 2026
+
+[Step 1] 检查 proxychains 配置...
+找到配置: /etc/proxychains.conf
+38:proxy_dns 
+51:#            	socks5	192.168.67.78	1080	lamer	secret
+53:#	 	socks4	192.168.1.49	1080
+57:#       proxy types: http, socks4, socks5
+64:socks4 	127.0.0.1 9050
+
+[Step 2] 检查 Tor 进程状态...
+未找到 Tor 进程
+
+[Step 3] 检查 tor 命令是否存在...
+/usr/bin/tor
+
+[Step 4] 尝试启动 Tor...
+尝试: tor --RunAsDaemon 1
+May 01 13:05:34.481 [notice] Tor 0.4.8.10 running on Linux with Libevent 2.1.12-stable, OpenSSL 3.0.13, Zlib 1.3, Liblzma 5.4.5, Libzstd 1.5.5 and Glibc 2.39 as libc.
+May 01 13:05:34.481 [notice] Tor can't help you if you use it wrong! Learn how to be safe at https://support.torproject.org/faq/staying-anonymous/
+May 01 13:05:34.481 [notice] Read configuration file "/etc/tor/torrc".
+May 01 13:05:34.482 [notice] Opening Socks listener on 127.0.0.1:9050
+May 01 13:05:34.482 [warn] Could not bind to 127.0.0.1:9050: Address already in use. Is Tor already running?
+May 01 13:05:34.482 [warn] Failed to parse/validate config: Failed to bind one of the listener ports.
+May 01 13:05:34.482 [err] Reading config failed--see warnings above.
+启动后进程状态:
+root           1  0.0  0.1  23028 14308 ?        Ss   Apr02   0:32 /sbin/init nospectre_v2 nospec_store_bypass_disable
+root         789  0.0  0.6 1367040 53240 ?       Ssl  Apr02   3:00 /usr/local/cloud-monitor-agent/cloud-monitor-agent start --config-file /usr/local/cloud-monitor-agent/config.yaml
+root        1255  0.0  0.8 1441796 64424 ?       Sl   Apr02  17:03 /usr/local/cloud-monitor-agent/cloud-monitor-agent worker --config-file /usr/local/cloud-monitor-agent/config.yaml
+debian-+  767442  0.0  0.3 179496 27036 ?        Ssl  Apr29   0:02 /usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc -f /etc/tor/torrc --RunAsDaemon 0
+root      858681  0.0  0.0   7340  3584 ?        S    13:05   0:00 /usr/bin/bash -c echo "[Step 4] 尝试启动 Tor..." >> /root/.openclaw/workspace/memory/staging/tor_test_result.txt if which tor >/dev/null 2>&1; then   echo "尝试: tor --RunAsDaemon 1" >> /root/.openclaw/workspace/memory/staging/tor_test_result.txt   tor --RunAsDaemon 1 >> /root/.openclaw/workspace/memory/staging/tor_test_result.txt 2>&1   sleep 3   echo "启动后进程状态:" >> /root/.openclaw/workspace/memory/staging/tor_test_result.txt   ps aux | grep -E "[t]or" >> /root/.openclaw/workspace/memory/staging/tor_test_result.txt 2>&1 else   echo "tor 命令不存在，无法启动" >> /root/.openclaw/workspace/memory/staging/tor_test_result.txt fi echo "" >> /root/.openclaw/workspace/memory/staging/tor_test_result.txt  echo "[Step 5] 检查 9050 端口监听..." >> /root/.openclaw/workspace/memory/staging/tor_test_result.txt ss -tlnp | grep 9050 >> /root/.openclaw/workspace/memory/staging/tor_test_result.txt 2>&1 || echo "ss 命令未找到9050端口" >> /root/.openclaw/workspace/memory/staging/tor_test_result.txt netstat -tlnp 2>/dev/null | grep 9050 >> /root/.openclaw/workspace/memory/staging/tor_test_result.txt 2>&1 || true echo "" >> /root/.openclaw/workspace/memory/staging/tor_test_result.txt
+
+[Step 5] 检查 9050 端口监听...
+LISTEN 0      4096       127.0.0.1:9050       0.0.0.0:*    users:(("tor",pid=767442,fd=6))             
+tcp        0      0 127.0.0.1:9050          0.0.0.0:*               LISTEN      767442/tor          
+
+[Step 6] 测试代理是否工作...
+9050端口在监听，尝试 proxychains curl 测试...
+/usr/bin/proxychains
+使用: proxychains curl http://httpbin.org/ip
+ProxyChains-3.1 (http://proxychains.sf.net)
+|DNS-request| httpbin.org 
+|S-chain|-<>-127.0.0.1:9050-<><>-4.2.2.2:53-
+测试完成。
+
+=== 测试结束 ===
+<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-4.2.2.2:53-
+=== 结论与注意事项 ===
+
+✅ Tor 已安装: /usr/bin/tor (版本 0.4.8.10)
+✅ Tor 服务已在运行 (PID: 767442, 用户: debian-+)
+✅ 9050 端口正在监听 (127.0.0.1:9050)
+✅ proxychains 配置正确指向 127.0.0.1:9050 (socks4)
+
+⚠️ 手动启动 Tor 失败原因: 9050端口已被占用 (Tor已在运行)
+⚠️ proxychains curl 测试因网络/超时尚未完成响应
+   Tor网络较慢，建议增加超时时间或使用更简单的测试目标
+
+建议使用的 Tor 控制命令:
+  systemctl status tor     # 查看服务状态
+  systemctl restart tor    # 重启服务
+  systemctl stop tor       # 停止服务
+<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-4.2.2.2:53-<--timeout

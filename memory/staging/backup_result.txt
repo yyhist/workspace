@@ -1,0 +1,32 @@
+===== OpenClaw Config Backup Result =====
+Date: 2026-05-01 14:42 (GMT+8)
+Command: openclaw backup create --only-config
+Status: 成功
+
+Backup File: /root/.openclaw/workspace/2026-05-01T06-42-41.161Z-openclaw-backup.tar.gz
+File Size: 3.3K
+Included Paths:
+- config: ~/.openclaw/openclaw.json
+
+Command Output (full):
+[plugins] [DingTalk] 插件已注册（支持主动发送 AI Card 消息）
+[plugins] feishu_chat: Registered feishu_chat, feishu_chat_members
+[plugins] feishu_im: Registered feishu_im_user_message, feishu_im_user_fetch_resource, feishu_im_user_get_messages, feishu_im_user_get_thread_messages, feishu_im_user_search_messages
+[plugins] feishu_search: Registered feishu_search_doc_wiki
+[plugins] feishu_drive: Registered feishu_drive_file, feishu_doc_comments, feishu_doc_media
+[plugins] feishu_wiki: Registered feishu_wiki_space, feishu_wiki_space_node
+[plugins] feishu_sheets: Registered feishu_sheet
+[plugins] feishu_im: Registered feishu_im_bot_image
+[plugins] Registered all OAPI tools (calendar, task, bitable, search, drive, wiki, sheets, im)
+[plugins] feishu_doc: Registered feishu_fetch_doc, feishu_create_doc, feishu_update_doc
+[plugins] feishu_oauth: Registered feishu_oauth tool
+[plugins] feishu_oauth_batch_auth: Registered feishu_oauth_batch_auth tool
+[plugins] wecom-openclaw-plugin failed to load from /root/.openclaw/extensions/wecom-openclaw-plugin/dist/index.js: Error: Cannot find module '/usr/lib/node_modules/openclaw/dist/plugin-sdk/root-alias.cjs/runtime-store'
+Require stack:
+- /root/.openclaw/extensions/wecom-openclaw-plugin/dist/src/runtime.js
+Backup archive: /root/.openclaw/workspace/2026-05-01T06-42-41.161Z-openclaw-backup.tar.gz
+Included 1 path:
+- config: ~/.openclaw/openclaw.json
+Created /root/.openclaw/workspace/2026-05-01T06-42-41.161Z-openclaw-backup.tar.gz
+
+Note: --only-config was supported and succeeded. No fallback needed.
